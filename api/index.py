@@ -7,16 +7,24 @@ from urllib.parse import unquote, urlparse
 app = FastAPI()
 
 
-@app.get('/api/set_time')
-async def set_time_handler(date: str, time: str):
+@app.get('/api/webhook')
+async def get_handler():
     try:
-        output = await set_time(f"{date} {time}")
-        print(output)
-        return output
+        
+        return 
     except Exception as e:
         print(e)
         return e
 
+@app.post('/api/webhook')
+async def post_handler():
+    try:
+        
+        return 
+    except Exception as e:
+        print(e)
+        return e
+        
 @app.get('/api/update')
 async def update_handler():
     try:
