@@ -21,7 +21,6 @@ redis_url = os.getenv("REDIS_URL")
 api = os.getenv("api")
 target_store = 59
 eapi = "https://eapi.pcloud.com/"
-token = "AT2fZ89VHkDT7OaQZMlMlVkZdslpGwQPJNbTKpnbvQtbO8yBYcny"
 auth = httpx.BasicAuth(username="admin", password=admin_password)
 #headers = {"Authorization": f"Bearer admin:{password}"}
 
