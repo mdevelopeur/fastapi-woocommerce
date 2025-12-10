@@ -49,5 +49,10 @@ async def get_cdek_token(client):
   print(response)
   return response["access_token"]
 
-async def get_cdek_order_number(client, token):
+async def get_cdek_order_number(client, token, im_number):
+  url = f"https://api.cdek.ru/v2/orders?im_number={im_number}"
+  headers = {"Authorization": f"Bearer {token}"}
+  response = client.get(url, headers=headers)
+  response = response.json()
+  return response["entity"]["cdek_number"]
   
