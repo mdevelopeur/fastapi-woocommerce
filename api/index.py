@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 import multipart
 import re
-from api.functions import main
+from api.functions import create, update
 from urllib.parse import unquote, urlparse
 
 app = FastAPI()
@@ -15,8 +15,30 @@ async def get_handler():
         print(e)
         return e
 
-@app.post('/api/webhook')
-async def post_handler(request: Request):
+@app.post('/api/create')
+async def create_deal(request: Request):
+    try: 
+        data = await request.json()
+        print(data)
+        await create(data)
+        return 
+    except Exception as e:
+        print(e)
+        return e
+
+@app.post('/api/update')
+async def create_deal(request: Request):
+    try: 
+        data = await request.json()
+        print(data)
+        await update(data)
+        return 
+    except Exception as e:
+        print(e)
+        return e
+
+@app.post('/api/delete')
+async def create_deal(request: Request):
     try: 
         data = await request.json()
         print(data)
@@ -25,3 +47,4 @@ async def post_handler(request: Request):
     except Exception as e:
         print(e)
         return e
+    
