@@ -14,10 +14,10 @@ load_dotenv(dotenv_path=".env.local")
 cdek_account = os.getenv("cdek_account")
 cdek_secure_password = os.getenv("cdek_secure_password")
 bitrix_webhook = os.getenv("bitrix_webhook")
-target_store = 59
-eapi = "https://eapi.pcloud.com/"
-token = "AT2fZ89VHkDT7OaQZMlMlVkZdslpGwQPJNbTKpnbvQtbO8yBYcny"
-headers = {"Authorization": f"Bearer {token}"}
+#target_store = 59
+#eapi = "https://eapi.pcloud.com/"
+#token = "AT2fZ89VHkDT7OaQZMlMlVkZdslpGwQPJNbTKpnbvQtbO8yBYcny"
+#headers = {"Authorization": f"Bearer {token}"}
 
 async def main(data):  
   async with httpx.AsyncClient() as client:
