@@ -31,6 +31,10 @@ async def create(data):
 async def update(data):
   async with httpx.AsyncClient() as client:
     data = match_data(data)
+    deal = await get_deal(client, data["id"])
+    data = match_data(data)
+    data["fields"]["ID"] = deal
+    await update_deal(client, data)
     
 async def get_cdek_token(client):
   url = "https://api.cdek.ru/v2/oauth/token"
@@ -52,6 +56,11 @@ async def create_deal(client, data):
   response = await client.post(url, json=data)
   print(response.json())
 
+async def update_deal(client, data):
+  url = bitrix_webhook + "crm.deal.update"
+  response = await client.post(url, json=data)
+  print(response.json())
+  
 async def get_deal(client, id):
   url = bitrix_webhook + "crm.deal.list"
   data = {"filter": {"ORIGIN_ID": id}}
@@ -71,11 +80,11 @@ def match_data(data):
     "payment_method": data["payment_method_title"],
     "items": list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"])),
   }
-  payload = {
+  fields = {
     "TITLE": f"Заказ #{order_data["id"]}",
     "CATEGORY_ID": 0,
     "STAGE_ID": "NEW",
     "COMMENTS": json.dumps(order_data),
     "ORIGIN_ID": order_data["id"]
   }
-  return payload
+  return {"fields": fields}
