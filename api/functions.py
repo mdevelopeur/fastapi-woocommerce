@@ -74,7 +74,7 @@ def match_data(data):
     "status": data["status"],
     "total": data["total"],
     "name": f"{data["shipping"]["first_name"]} {data["shipping"]["last_name"]}",
-    "email": data["shipping"]["email"],
+    "email": data["billing"]["email"],
     "phone": data["shipping"]["phone"],
     "address": f"{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}",
     "payment_method": data["payment_method_title"],
