@@ -6,6 +6,7 @@ import math
 import numbers
 import time
 import os
+import json
 import redis
 import random 
 from dotenv import load_dotenv
@@ -19,12 +20,17 @@ bitrix_webhook = os.getenv("bitrix_webhook")
 #token = "AT2fZ89VHkDT7OaQZMlMlVkZdslpGwQPJNbTKpnbvQtbO8yBYcny"
 #headers = {"Authorization": f"Bearer {token}"}
 
-async def main(data):  
+async def create(data):  
   async with httpx.AsyncClient() as client:
     #cdek_token = await get_cdek_token(client)
     #cdek_order_data = await get_cdek_order_data(client, cdek_token, data["id"])
-    print(cdek_order_data)
-    
+    #print(cdek_order_data)
+    data = match_data(data)
+    await create_deal(client, data)
+
+async def update(data):
+  async with httpx.AsyncClient() as client:
+    data = match_data(data)
     
 async def get_cdek_token(client):
   url = "https://api.cdek.ru/v2/oauth/token"
@@ -46,8 +52,15 @@ async def create_deal(client, data):
   response = await client.post(url, json=data)
   print(response.json())
 
+async def get_deal(client, id):
+  url = bitrix_webhook + "crm.deal.list"
+  data = {"filter": {"ORIGIN_ID": id}}
+  response = await client.post(url, json=data)
+  print(response.json())
+  return response["result"]["ID"]
+  
 def match_data(data):
-  output = {
+  order_data = {
     "id": data["id"], 
     "status": data["status"],
     "total": data["total"],
@@ -56,6 +69,13 @@ def match_data(data):
     "phone": data["billing"]["phone"],
     "address": f"{data["shipping"]["city"]}, {data["shipping"]["addr_1"]}, {data["shipping"]["postcode"]}",
     "payment_method": data["payment_method_title"],
-    
+    "items": list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"])),
   }
-  
+  payload = {
+    "TITLE": f"Заказ #{order_data["id"]}",
+    "CATEGORY_ID": 0,
+    "STAGE_ID": "NEW",
+    "COMMENTS": json.dumps(order_data),
+    "ORIGIN_ID": order_data["id"]
+  }
+  return payload
