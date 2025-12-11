@@ -22,7 +22,7 @@ bitrix_webhook = os.getenv("bitrix_webhook")
 async def main(data):  
   async with httpx.AsyncClient() as client:
     cdek_token = await get_cdek_token(client)
-    cdek_order_data = await get_cdek_order_data(client, token, data["id"])
+    cdek_order_data = await get_cdek_order_data(client, cdek_token, data["id"])
     print(cdek_order_data)
     
     
