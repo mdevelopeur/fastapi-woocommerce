@@ -21,8 +21,8 @@ bitrix_webhook = os.getenv("bitrix_webhook")
 
 async def main(data):  
   async with httpx.AsyncClient() as client:
-    cdek_token = await get_cdek_token(client)
-    cdek_order_data = await get_cdek_order_data(client, cdek_token, data["id"])
+    #cdek_token = await get_cdek_token(client)
+    #cdek_order_data = await get_cdek_order_data(client, cdek_token, data["id"])
     print(cdek_order_data)
     
     
@@ -47,5 +47,15 @@ async def create_deal(client, data):
   print(response.json())
 
 def match_data(data):
-  output = {}
+  output = {
+    "id": data["id"], 
+    "status": data["status"],
+    "total": data["total"],
+    "name": f"{data["billing"]["first_name"] data["billing"]["last_name"]}",
+    "email": data["billing"]["email"],
+    "phone": data["billing"]["phone"],
+    "address": f"{data["shipping"]["city"]}, {data["shipping"]["addr_1"]}, {data["shipping"]["postcode"]}",
+    "payment_method": data["payment_method_title"],
+    
+  }
   
