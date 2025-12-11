@@ -1,56 +1,26 @@
 from fastapi import FastAPI, Request
 import multipart
 import re
-from api.handlers import set_time, update, clear_keys, hash_password
+from api.functions import main
 from urllib.parse import unquote, urlparse
 
 app = FastAPI()
 
-
 @app.get('/api/webhook')
 async def get_handler():
     try:
-        
+        ...
         return 
     except Exception as e:
         print(e)
         return e
 
 @app.post('/api/webhook')
-async def post_handler():
-    try:
-        
+async def post_handler(request: Request):
+    try: 
+        data = await request.json()
+        await main(data)
         return 
-    except Exception as e:
-        print(e)
-        return e
-        
-@app.get('/api/update')
-async def update_handler():
-    try:
-        output = await update()
-        print(output)
-        return output 
-    except Exception as e:
-        print(e)
-        return e
-
-@app.get('/api/clear_keys')
-async def clear_keys_handler():
-    try:
-        output = await clear_keys()
-        print(output)
-        return output 
-    except Exception as e:
-        print(e)
-        return e
-
-@app.get('/api/hash')
-async def hash(password: str, hash_algorithm: str, salt: str):
-    try:
-        output = hash_password(password, hash_algorithm, salt)
-        print("result: ", output)
-        return output 
     except Exception as e:
         print(e)
         return e
