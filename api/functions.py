@@ -19,28 +19,10 @@ eapi = "https://eapi.pcloud.com/"
 token = "AT2fZ89VHkDT7OaQZMlMlVkZdslpGwQPJNbTKpnbvQtbO8yBYcny"
 headers = {"Authorization": f"Bearer {token}"}
 
-async def main(deal):  
+async def main(data):  
   async with httpx.AsyncClient() as client:
-    print(deal)
-    status = await check_status(client, deal)
-    print(status)
-    if status:
-      products = await get_products(client, deal)
-      remainings = await get_remaining_amounts(client, products)
-      remainings = filter_remainings(remainings)
-      #print(remainings[products[0]["PRODUCT_ID"]])
-      for product in products:
-        
-        product = process_product(product, remainings[str(product["PRODUCT_ID"])])
-      total = sum(list(map(lambda item: item["total"], products)))
-      documents = await get_documents(client, products)
-      await add_products(client, products, documents)
-      if "S" in documents:
-        ...
-        #await update_document(client, documents["S"], total)
-      #time.sleep(10)
-      await confirm_documents(client, documents)
-    client.close()
+    print(data)
+    
     
 async def get_cdek_token(client):
   url = "https://api.cdek.ru/v2/oauth/token"
@@ -61,3 +43,7 @@ async def create_deal(client, data):
   url = bitrix_webhook + "crm.deal.add"
   response = await client.post(url, json=data)
   print(response.json())
+
+def match_data(data):
+  output = {}
+  
