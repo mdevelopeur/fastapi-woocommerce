@@ -30,7 +30,7 @@ async def create(data):
 
 async def update(data):
   async with httpx.AsyncClient() as client:
-    data = match_data(data)
+    #data = match_data(data)
     deal = await get_deal(client, data["id"])
     data = match_data(data)
     data["fields"]["ID"] = deal
