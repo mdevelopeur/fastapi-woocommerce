@@ -58,3 +58,15 @@ async def update_deal_encoding(request: Request):
     except Exception as e:
         print(e)
         return e
+
+@app.post('/api/cdek_update')
+async def update_deal_encoding(request: Request):
+    try: 
+        data = await request.json()
+        print(data)
+        #await update_encoding(data)
+        return 
+    except Exception as e:
+        print(e)
+        return e
+        
