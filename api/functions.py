@@ -67,7 +67,11 @@ async def get_deal(client, id):
   response = await client.post(url, json=data)
   print(response.json())
   return response["result"]["ID"]
-  
+
+async def update_encoding(data):
+  async with httpx.AsyncClient() as client:
+    await update_deal(client, data)
+    
 def match_data(data):
   order_data = {
     "id": data["id"], 
@@ -80,11 +84,16 @@ def match_data(data):
     "payment_method": data["payment_method_title"],
     "items": list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"])),
   }
+
   fields = {
     "TITLE": f"Заказ #{order_data["id"]}",
     "CATEGORY_ID": 0,
     "STAGE_ID": "NEW",
     "COMMENTS": json.dumps(order_data),
-    "ORIGIN_ID": order_data["id"]
+    "ORIGIN_ID": order_data["id"],
+    "OPPORTUNITY": order_data["total"],
+    "UF_CRM_DLYALUDEIRU57": order_data["id"],
+    "UF_CRM_67978D249E9AE": order_data["payment_method"]
+    
   }
   return {"fields": fields}
