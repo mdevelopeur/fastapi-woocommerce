@@ -27,7 +27,7 @@ async def create_deal(request: Request):
         return e
 
 @app.post('/api/update')
-async def create_deal(request: Request):
+async def update_deal(request: Request):
     try: 
         data = await request.json()
         print(data)
@@ -49,7 +49,7 @@ async def create_deal(request: Request):
         return e
 
 @app.post('/api/update_encoding')
-async def create_deal(request: Request):
+async def update_deal_encoding(request: Request):
     try: 
         data = await request.json()
         print(data)
