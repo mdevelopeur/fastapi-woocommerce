@@ -60,7 +60,7 @@ async def update_deal_encoding(request: Request):
         return e
 
 @app.post('/api/cdek_update')
-async def update_deal_encoding(request: Request):
+async def update_cdek_data(request: Request):
     try: 
         data = await request.json()
         print(data)
