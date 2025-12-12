@@ -84,12 +84,12 @@ def match_data(data):
     "payment_method": data["payment_method_title"],
     "items": list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"])),
   }
-
+  #items = 
   fields = {
     "TITLE": f"Заказ #{order_data["id"]}",
     "CATEGORY_ID": 0,
     "STAGE_ID": "NEW",
-    "COMMENTS": json.dumps(order_data),
+    "COMMENTS": "\n".join(list(map(lambda item: f"{item["name"]} - {item["quantity"]}: {item["total"]}", order_data["items"]))),
     "ORIGIN_ID": order_data["id"],
     "OPPORTUNITY": order_data["total"],
     "UF_CRM_DLYALUDEIRU57": order_data["id"],
