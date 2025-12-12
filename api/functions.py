@@ -15,10 +15,6 @@ load_dotenv(dotenv_path=".env.local")
 cdek_account = os.getenv("cdek_account")
 cdek_secure_password = os.getenv("cdek_secure_password")
 bitrix_webhook = os.getenv("bitrix_webhook")
-#target_store = 59
-#eapi = "https://eapi.pcloud.com/"
-#token = "AT2fZ89VHkDT7OaQZMlMlVkZdslpGwQPJNbTKpnbvQtbO8yBYcny"
-#headers = {"Authorization": f"Bearer {token}"}
 
 async def create(data):  
   async with httpx.AsyncClient() as client:
@@ -31,11 +27,14 @@ async def create(data):
 async def update(data):
   async with httpx.AsyncClient() as client:
     #data = match_data(data)
-    deal = await get_deal(client, data["id"])
+    deals = await get_deals(client, data["id"])
     data = match_data(data)
-    data["fields"]["ID"] = deal
-    await update_deal(client, data)
-    
+    if len(deals):
+      data["fields"]["ID"] = deals[0]["ID"]
+      await update_deal(client, data)
+    else: 
+      await create_deal(client, data)
+      
 async def get_cdek_token(client):
   url = "https://api.cdek.ru/v2/oauth/token"
   data = {"client_id": cdek_account, "client_secret": cdek_secure_password, "grant_type": "client_credentials"}
@@ -61,12 +60,12 @@ async def update_deal(client, data):
   response = await client.post(url, json=data)
   print(response.json())
   
-async def get_deal(client, id):
+async def get_deals(client, id):
   url = bitrix_webhook + "crm.deal.list"
   data = {"filter": {"ORIGIN_ID": id}}
   response = await client.post(url, json=data)
   print(response.json())
-  return response["result"]["ID"]
+  return response["result"]
 
 async def update_encoding(data):
   async with httpx.AsyncClient() as client:
