@@ -50,6 +50,17 @@ async def get_cdek_order_data(client, token, im_number):
   response = response.json()
   return response["entity"]
 
+async def update_cdek_number(cdek_number, id):
+  async with httpx.AsyncClient() as client:
+    deal = await get_deals(client, id)[0]["ID"]
+    data = {
+      "id": id,
+      "fields": {
+        "UF_CRM_1765618344040": cdek_number
+      }
+    }   
+    await update_deal(client, data)
+  
 async def create_deal(client, data):
   url = bitrix_webhook + "crm.deal.add"
   response = await client.post(url, json=data)
