@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 import multipart
 import re
-from api.functions import create, update, update_encoding
+from api.functions import create, update, update_encoding, update_cdek_number
 from urllib.parse import unquote, urlparse
 
 app = FastAPI()
@@ -63,8 +63,9 @@ async def update_deal_encoding(request: Request):
 async def update_cdek_data(request: Request):
     try: 
         data = await request.json()
+        attributes = data["attributes"]
         print(data)
-        #await update_encoding(data)
+        await update_cdek_number(attributes["cdek_number"], attributes["number"])
         return 
     except Exception as e:
         print(e)
