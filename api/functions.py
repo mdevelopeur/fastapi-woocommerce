@@ -78,6 +78,19 @@ async def get_deals(client, id):
   print(response.json())
   return response["result"]
 
+async def get_contacts(client, payload):
+  url = bitrix_webhook + "crm.deal.list"
+  response = await client.post(url, json=data)
+  return response["result"]
+
+async def get_contact(client, data):
+  filter_list = [{"email": data["billing"]["email"]}, {"phone": data["billing"]["phone"]}]
+  for filter in filter_list:
+    data = {"filter": filter}
+    contacts = await get_contacts(client, data)
+    if contacts:
+      return contacts[0]["ID"]
+
 async def update_encoding(data):
   async with httpx.AsyncClient() as client:
     await update_deal(client, data)
