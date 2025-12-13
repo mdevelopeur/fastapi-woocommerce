@@ -78,12 +78,14 @@ async def get_deals(client, id):
   url = bitrix_webhook + "crm.deal.list"
   data = {"filter": {"ORIGIN_ID": id}}
   response = await client.post(url, json=data)
-  print(response.json())
+  response = response.json()
+  print(response)  
   return response["result"]
 
 async def get_contacts(client, data):
   url = bitrix_webhook + "crm.deal.list"
   response = await client.post(url, json=data)
+  response = response.json()
   return response["result"]
 
 async def get_contact_id(client, data):
@@ -99,6 +101,7 @@ async def get_contact_data(client, id):
   url = bitrix_webhook + "crm.contact.get"
   data = {"ID": id }
   response = await client.post(url, json=data)
+  response = response.json()
   return response["result"]
   
 async def create_contact(client, data):
@@ -123,6 +126,7 @@ async def create_contact(client, data):
   }
   data = {"fields": fields}
   response = await client.post(url, json=data)
+  response = response.json()
   return response["result"]["ID"]
     
 async def update_contact(client, id, data):
@@ -150,6 +154,7 @@ async def update_contact(client, id, data):
     "fields": fields
   }
   response = await client.post(url, json=data)
+  response = response.json()
   return response["result"]
   
 async def update_encoding(data):
