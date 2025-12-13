@@ -25,6 +25,7 @@ async def create(data):
       contact_id = await create_contact(client, data)
     data["contact_id"] = contact_id
     fields = get_deal_fields(data)
+    payload = { "fields": fields}
     await create_deal(client, fields)
 
 async def update(data):
@@ -145,7 +146,7 @@ async def update_contact(client, id, data):
     "ID": id,
     "fields": fields
   }
-  response = await client.post(url, json=data)
+  response = await client.post(url, json=payload)
   response = response.json()
   print(response)
   return response
