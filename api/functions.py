@@ -55,9 +55,9 @@ async def get_cdek_order_data(client, token, im_number):
 
 async def update_cdek_number(cdek_number, id):
   async with httpx.AsyncClient() as client:
-    deal = await get_deals(client, id)[0]
+    deals= await get_deals(client, id)
     data = {
-      "id": deal["ID"],
+      "id": deals[0]["ID"],
       "fields": {
         "UF_CRM_1765618344040": cdek_number
       }
