@@ -177,7 +177,7 @@ def get_deal_fields(data):
     "ORIGIN_ID": data["id"],
     "OPPORTUNITY": data["total"],
     "UF_CRM_DLYALUDEIRU57": data["id"],
-    "UF_CRM_67978D249E9AE": order_data["payment_method"]
+    "UF_CRM_67978D249E9AE": order_data["payment_method"],
     "UF_CRM_1765627743791": 0
   }
   return {"fields": fields}
