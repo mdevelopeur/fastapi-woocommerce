@@ -117,6 +117,6 @@ def match_data(data):
     "OPPORTUNITY": order_data["total"],
     "UF_CRM_DLYALUDEIRU57": order_data["id"],
     "UF_CRM_67978D249E9AE": order_data["payment_method"]
-    
+    "UF_CRM_1765627743791": 0
   }
   return {"fields": fields}
