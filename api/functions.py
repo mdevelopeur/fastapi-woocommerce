@@ -121,7 +121,7 @@ async def create_contact(client, data):
       ]
     }
   }
-  payload = {"fields": fields}
+  data = {"fields": fields}
   response = await client.post(url, json=data)
   return response["result"]["ID"]
     
@@ -170,14 +170,15 @@ def get_deal_fields(data):
   }
   #items = 
   fields = {
-    "TITLE": f"Заказ #{order_data["id"]}",
+    "TITLE": f"Заказ #{data["id"]}",
     "CATEGORY_ID": 0,
     "STAGE_ID": "NEW",
     "COMMENTS": "\n".join(list(map(lambda item: f"{item["name"]} - {item["quantity"]}: {item["total"]}", order_data["items"]))),
     "ORIGIN_ID": data["id"],
     "OPPORTUNITY": data["total"],
+    "CONTACT_ID": data["contact_id"],
     "UF_CRM_DLYALUDEIRU57": data["id"],
     "UF_CRM_67978D249E9AE": order_data["payment_method"],
     "UF_CRM_1765627743791": 0
   }
-  return {"fields": fields}
+  return fields
