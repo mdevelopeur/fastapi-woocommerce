@@ -54,9 +54,9 @@ async def get_cdek_order_data(client, token, im_number):
   response = response.json()
   return response["entity"]
 
-async def update_cdek_number(cdek_number, id):
+async def update_cdek_number(cdek_number, order):
   async with httpx.AsyncClient() as client:
-    deals= await get_deals(client, id)
+    deals= await get_deals(client, order)
     data = {
       "id": deals[0]["ID"],
       "fields": {
@@ -75,9 +75,9 @@ async def update_deal(client, data):
   response = await client.post(url, json=data)
   print(response.json())
   
-async def get_deals(client, id):
+async def get_deals(client, order):
   url = bitrix_webhook + "crm.deal.list"
-  data = {"filter": {"ORIGIN_ID": id}}
+  data = {"filter": {"ORIGIN_ID": order}}
   response = await client.post(url, json=data)
   response = response.json()
   print(response)  
@@ -126,7 +126,7 @@ async def create_contact(client, data):
   response = response.json()
   return response["result"]["ID"]
     
-async def update_contact(client, id, data):
+async def update_contact(client, contact_id, data):
   url = bitrix_webhook + "crm.contact.update"
   fields = {
     "NAME": data["shipping"]["first_name"],
@@ -143,7 +143,7 @@ async def update_contact(client, id, data):
     ]
   }
   payload = {
-    "ID": id,
+    "ID": contact_id,
     "fields": fields
   }
   print(payload)
