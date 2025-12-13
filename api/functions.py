@@ -91,6 +91,24 @@ async def get_contact(client, data):
     if contacts:
       return contacts[0]["ID"]
 
+async def create_contact(client, data):
+  url = bitrix_webhook + "crm.contact.add"
+  fields = {
+    "NAME": data["shipping"]["first_name"],
+    "LAST_NAME": data["shipping"]["last_name"],
+    "EMAIL": {
+      "VALUE": data["billing"]["email"]
+    },
+    "PHONE": {
+      "VALUE": data["shipping"]["phone"]
+    }
+  }
+  payload = {"fields": fields}
+  response = await client.post(url, json=data)
+  return response["result"]
+    
+async def update_contact(client, data):
+  
 async def update_encoding(data):
   async with httpx.AsyncClient() as client:
     await update_deal(client, data)
