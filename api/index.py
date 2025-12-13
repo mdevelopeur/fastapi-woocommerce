@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 import multipart
 import re
+import traceback
 from api.functions import create, update, update_encoding, update_cdek_number
 from urllib.parse import unquote, urlparse
 
@@ -23,6 +24,7 @@ async def create_deal(request: Request):
         await create(data)
         return 
     except Exception as e:
+        print(traceback.print_exc())
         print(e)
         return e
 
