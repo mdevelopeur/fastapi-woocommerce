@@ -86,7 +86,7 @@ async def get_deals(client, order):
   return response["result"]
 
 async def get_contacts(client, data):
-  url = bitrix_webhook + "crm.deal.list"
+  url = bitrix_webhook + "crm.contact.list"
   response = await client.post(url, json=data)
   response = response.json()
   return response["result"]
