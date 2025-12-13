@@ -20,7 +20,7 @@ async def create(data):
   async with httpx.AsyncClient() as client:
     contact_id = await get_contact_id(client, data)
     if contact_id:
-      await update_contact(client, id, data)
+      await update_contact(client, contact_id, data)
     else:
       contact_id = await create_contact(client, data)
     data["contact_id"] = contact_id
