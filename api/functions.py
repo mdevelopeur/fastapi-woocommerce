@@ -108,12 +108,16 @@ async def create_contact(client, data):
     "LAST_NAME": data["shipping"]["last_name"],
     "EMAIL": {
       [
-        "VALUE": data["billing"]["email"]
+        {
+          "VALUE": data["billing"]["email"]
+        }
       ]
     },
     "PHONE": {
       [
-        "VALUE": data["shipping"]["phone"]
+        {
+          "VALUE": data["shipping"]["phone"]
+        }
       ]
     }
   }
@@ -128,12 +132,16 @@ async def update_contact(client, id, data):
     "LAST_NAME": data["shipping"]["last_name"],
     "EMAIL": {
       [
-        "VALUE": data["billing"]["email"]
+        {
+          "VALUE": data["billing"]["email"]
+        }
       ]
     },
     "PHONE": {
       [
-        "VALUE": data["shipping"]["phone"]
+        {
+          "VALUE": data["shipping"]["phone"]
+        }
       ]
     }
   }
