@@ -18,11 +18,14 @@ bitrix_webhook = os.getenv("bitrix_webhook")
 
 async def create(data):  
   async with httpx.AsyncClient() as client:
-    #cdek_token = await get_cdek_token(client)
-    #cdek_order_data = await get_cdek_order_data(client, cdek_token, data["id"])
-    #print(cdek_order_data)
-    data = match_data(data)
-    await create_deal(client, data)
+    contact_id = await get_contact_id(client, data)
+    if contact_id:
+      await update_contact(client, id, data)
+    else:
+      contact_id = await create_contact(client, data)
+    data["contact_id"] = contact_id
+    fields = get_deal_fields(data)
+    await create_deal(client, fields)
 
 async def update(data):
   async with httpx.AsyncClient() as client:
@@ -83,37 +86,69 @@ async def get_contacts(client, payload):
   response = await client.post(url, json=data)
   return response["result"]
 
-async def get_contact(client, data):
+async def get_contact_id(client, data):
   filter_list = [{"email": data["billing"]["email"]}, {"phone": data["billing"]["phone"]}]
   for filter in filter_list:
     data = {"filter": filter}
     contacts = await get_contacts(client, data)
     if contacts:
       return contacts[0]["ID"]
+  return ""
 
+async def get_contact_data(client, id):
+  url = bitrix_webhook + "crm.contact.get"
+  data = {"ID": id }
+  response = await client.post(url, json=data)
+  return response["result"]
+  
 async def create_contact(client, data):
   url = bitrix_webhook + "crm.contact.add"
   fields = {
     "NAME": data["shipping"]["first_name"],
     "LAST_NAME": data["shipping"]["last_name"],
     "EMAIL": {
-      "VALUE": data["billing"]["email"]
+      [
+        "VALUE": data["billing"]["email"]
+      ]
     },
     "PHONE": {
-      "VALUE": data["shipping"]["phone"]
+      [
+        "VALUE": data["shipping"]["phone"]
+      ]
     }
   }
   payload = {"fields": fields}
   response = await client.post(url, json=data)
-  return response["result"]
+  return response["result"]["ID"]
     
-async def update_contact(client, data):
+async def update_contact(client, id, data):
+  url = bitrix_webhook + "crm.contact.update"
+  fields = {
+    "NAME": data["shipping"]["first_name"],
+    "LAST_NAME": data["shipping"]["last_name"],
+    "EMAIL": {
+      [
+        "VALUE": data["billing"]["email"]
+      ]
+    },
+    "PHONE": {
+      [
+        "VALUE": data["shipping"]["phone"]
+      ]
+    }
+  }
+  payload = {
+    "ID": id,
+    "fields": fields
+  }
+  response = await client.post(url, json=data)
+  return response["result"]
   
 async def update_encoding(data):
   async with httpx.AsyncClient() as client:
     await update_deal(client, data)
     
-def match_data(data):
+def get_deal_fields(data):
   order_data = {
     "id": data["id"], 
     "status": data["status"],
@@ -131,9 +166,9 @@ def match_data(data):
     "CATEGORY_ID": 0,
     "STAGE_ID": "NEW",
     "COMMENTS": "\n".join(list(map(lambda item: f"{item["name"]} - {item["quantity"]}: {item["total"]}", order_data["items"]))),
-    "ORIGIN_ID": order_data["id"],
-    "OPPORTUNITY": order_data["total"],
-    "UF_CRM_DLYALUDEIRU57": order_data["id"],
+    "ORIGIN_ID": data["id"],
+    "OPPORTUNITY": data["total"],
+    "UF_CRM_DLYALUDEIRU57": data["id"],
     "UF_CRM_67978D249E9AE": order_data["payment_method"]
     "UF_CRM_1765627743791": 0
   }
