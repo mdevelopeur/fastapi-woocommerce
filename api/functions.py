@@ -146,6 +146,7 @@ async def update_contact(client, id, data):
     "ID": id,
     "fields": fields
   }
+  print(payload)
   response = await client.post(url, json=payload)
   response = response.json()
   print(response)
