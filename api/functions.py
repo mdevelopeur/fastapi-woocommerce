@@ -147,7 +147,8 @@ async def update_contact(client, id, data):
   }
   response = await client.post(url, json=data)
   response = response.json()
-  return response["result"]
+  print(response)
+  return response
   
 async def update_encoding(data):
   async with httpx.AsyncClient() as client:
