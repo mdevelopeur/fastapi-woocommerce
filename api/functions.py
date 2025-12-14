@@ -91,7 +91,7 @@ async def get_contacts(client, data):
   return response["result"]
 
 async def get_contact_id(client, data):
-  filter_list = ["EMAIL": data["billing"]["email"]}, {"PHONE": data["billing"]["phone"]}]
+  filter_list = [{"EMAIL": data["billing"]["email"]}, {"PHONE": data["billing"]["phone"]}]
   for filter in filter_list:
     data = {"filter": filter}
     contacts = await get_contacts(client, data)
