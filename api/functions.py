@@ -48,7 +48,6 @@ async def get_cdek_token(client):
   return response["access_token"]
   ...
 
-
 async def get_cdek_order_data(client, token, im_number):
   url = f"https://api.cdek.ru/v2/orders?im_number={im_number}"
   headers = {"Authorization": f"Bearer {token}"}
@@ -170,6 +169,7 @@ def get_deal_fields(data):
     "payment_method": data["payment_method_title"],
     "items": list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"])),
   }
+  print(unquote(data["sbjs_current"]))
   #items = 
   fields = {
     "TITLE": f"Заказ #{data["id"]}",
