@@ -26,7 +26,7 @@ async def create(data):
     data["contact_id"] = contact_id
     fields = get_deal_fields(data)
     payload = { "fields": fields}
-    await create_deal(client, fields)
+    await create_deal(client, payload)
 
 async def update(data):
   async with httpx.AsyncClient() as client:
