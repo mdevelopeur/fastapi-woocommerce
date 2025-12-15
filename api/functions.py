@@ -90,7 +90,7 @@ async def get_deals(client, order):
 
 async def set_deal_products(client, id, line_items):
   url = bitrix_webhook + "crm.deal.productrows.set"
-  rows = list(map(lambda item: {"PRODUCT_ID": item["crm_id"], "QUANTITY": item["quantity"]}, line_items))
+  rows = list(map(lambda item: {"PRODUCT_ID": item["crm_id"], "PRICE": item["price"], "QUANTITY": item["quantity"]}, line_items))
   data = {"ID": id, "rows": rows}
   response = await client.post(url, json=data)
   print(response.json())
