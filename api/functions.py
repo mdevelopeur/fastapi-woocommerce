@@ -213,7 +213,7 @@ def get_deal_fields(data):
     #адрес доставки 
     "UF_CRM_1765783423126": f"{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}",
     #тип доставки
-    "UF_CRM_1765783446849": "",
+    "UF_CRM_1765783446849": data["shipping_lines"][0]["method_title"],
     #телефон
     "UF_CRM_1765783469498": data["shipping"]["phone"],
     #email
