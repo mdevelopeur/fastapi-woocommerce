@@ -24,7 +24,7 @@ async def create(data):
     else:
       contact_id = await create_contact(client, data)
     data["contact_id"] = contact_id
-    data["line_items"] =  set_product_skus(client, line_items)
+    data["line_items"] =  set_product_skus(client, data["line_items"])
     fields = get_deal_fields(data)
     payload = { "fields": fields}
     deal = await create_deal(client, payload)
