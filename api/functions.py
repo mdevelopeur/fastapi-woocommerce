@@ -84,6 +84,13 @@ async def get_deals(client, order):
   print(response)  
   return response["result"]
 
+async def set_deal_products(client, id, line_items):
+  url = bitrix_webhook + "crm.deal.productrows.set"
+  rows = list(map(lambda item: {"PRODUCT_ID": "", "QUANTITY": item["quantity"]}, line_items))
+  data = {"ID": id, "rows": rows}
+  response = await client.post(url, json=data)
+  print(response.json())
+  
 async def get_contacts(client, data):
   url = bitrix_webhook + "crm.contact.list"
   response = await client.post(url, json=data)
@@ -179,6 +186,7 @@ def get_deal_fields(data):
     "ORIGIN_ID": data["id"],
     "OPPORTUNITY": data["total"],
     "CONTACT_ID": data["contact_id"],
+    "ASSIGNED_BY_ID": 17,
     "UF_CRM_DLYALUDEIRU57": data["id"],
     "UF_CRM_67978D249E9AE": order_data["payment_method"],
     #ym client id 
@@ -188,9 +196,9 @@ def get_deal_fields(data):
     #тип доставки
     "UF_CRM_1765783446849": "",
     #телефон
-    "UF_CRM_1765783469498": "",
+    "UF_CRM_1765783469498": data["shipping"]["phone"],
     #email
-    "UF_CRM_1765783595133": "",
+    "UF_CRM_1765783595133": data["billing"]["email"],
     #оплачено
     "UF_CRM_1765783623915": ""
   }
