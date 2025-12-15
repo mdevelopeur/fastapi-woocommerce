@@ -99,6 +99,7 @@ async def get_deal_products(client, line_items):
   url = bitrix_webhook + "catalog.products.list"
   sku_list = list(map(lambda item: item["sku"], line_items))
   data = {"select": ["id", "property159"], "filter": {"iblockId": 17, "property159": sku_list}}
+  print(data)
   response = await client.post(url, json=data)
   response = response.json()
   return response["result"]["products"]
