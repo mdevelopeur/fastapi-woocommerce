@@ -24,10 +24,12 @@ async def create(data):
     else:
       contact_id = await create_contact(client, data)
     data["contact_id"] = contact_id
+    data["line_items"] =  set_product_skus(client, line_items)
     fields = get_deal_fields(data)
     payload = { "fields": fields}
-    await create_deal(client, payload)
-
+    deal = await create_deal(client, payload)
+    await set_deal_products(client, deal, data["line_items"])
+    
 async def update(data):
   async with httpx.AsyncClient() as client:
     #data = match_data(data)
@@ -69,7 +71,9 @@ async def update_cdek_number(cdek_number, order):
 async def create_deal(client, data):
   url = bitrix_webhook + "crm.deal.add"
   response = await client.post(url, json=data)
-  print(response.json())
+  response = response.json()
+  print(response)
+  return response["result"]
 
 async def update_deal(client, data):
   url = bitrix_webhook + "crm.deal.update"
