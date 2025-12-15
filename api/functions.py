@@ -108,7 +108,7 @@ async def set_product_skus(client, line_items):
   products = await get_deal_products(client, line_items)
   print(products)
   for item in line_items:
-    item["crm_id"] = list(filter(lambda product: product["property159"]["value"] == item["sku"], products))[0]["ID"]
+    item["crm_id"] = list(filter(lambda product: product["property159"]["value"] == item["sku"], products))[0]["id"]
   return line_items
   
 async def get_contacts(client, data):
