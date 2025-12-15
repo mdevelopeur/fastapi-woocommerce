@@ -24,7 +24,7 @@ async def create(data):
     else:
       contact_id = await create_contact(client, data)
     data["contact_id"] = contact_id
-    data["line_items"] =  set_product_skus(client, data["line_items"])
+    data["line_items"] = await set_product_skus(client, data["line_items"])
     fields = get_deal_fields(data)
     payload = { "fields": fields}
     deal = await create_deal(client, payload)
@@ -105,6 +105,7 @@ async def get_deal_products(client, line_items):
   
 async def set_product_skus(client, line_items):
   products = await get_deal_products(client, line_items)
+  print(products)
   for item in line_items:
     item["crm_id"] = list(filter(lambda product: product["property159"]["value"] == item["sku"], products))
   return line_items
