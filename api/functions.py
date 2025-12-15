@@ -186,12 +186,12 @@ def get_deal_fields(data):
     #адрес доставки 
     "UF_CRM_1765783423126": f"{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}",
     #тип доставки
-    "UF_CRM_1765783446849": ,
+    "UF_CRM_1765783446849": "",
     #телефон
-    "UF_CRM_1765783469498": ,
+    "UF_CRM_1765783469498": "",
     #email
-    "UF_CRM_1765783595133": ,
+    "UF_CRM_1765783595133": "",
     #оплачено
-    "UF_CRM_1765783623915": 
+    "UF_CRM_1765783623915": ""
   }
   return fields
