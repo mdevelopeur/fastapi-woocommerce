@@ -86,10 +86,24 @@ async def get_deals(client, order):
 
 async def set_deal_products(client, id, line_items):
   url = bitrix_webhook + "crm.deal.productrows.set"
-  rows = list(map(lambda item: {"PRODUCT_ID": "", "QUANTITY": item["quantity"]}, line_items))
+  rows = list(map(lambda item: {"PRODUCT_ID": item["crm_id"], "QUANTITY": item["quantity"]}, line_items))
   data = {"ID": id, "rows": rows}
   response = await client.post(url, json=data)
   print(response.json())
+
+async def get_deal_products(client, line_items):
+  url = bitrix_webhook + "catalog.products.list"
+  sku_list = list(map(lambda item: item["sku"], line_items))
+  data = {"select": ["id", "property159"], "filter": {"iblockId": 17, "property159": sku_list}}
+  response = await client.post(url, json=data)
+  response = response.json()
+  return response["result"]["products"]
+  
+async def set_product_skus(client, line_items):
+  products = await get_deal_products(client, line_items)
+  for item in line_items:
+    item["crm_id"] = list(filter(lambda product: product["property159"]["value"] == item["sku"], products))
+  return line_items
   
 async def get_contacts(client, data):
   url = bitrix_webhook + "crm.contact.list"
@@ -176,7 +190,8 @@ def get_deal_fields(data):
     "payment_method": data["payment_method_title"],
     "items": list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"])),
   }
-  print(unquote(data["sbjs_current"]))
+  print(data["sbjs_current"])
+  #print(unquote(data["sbjs_current"]))
   #items = 
   fields = {
     "TITLE": f"Заказ #{data["id"]}",
@@ -190,7 +205,7 @@ def get_deal_fields(data):
     "UF_CRM_DLYALUDEIRU57": data["id"],
     "UF_CRM_67978D249E9AE": order_data["payment_method"],
     #ym client id 
-    "UF_CRM_1765627743791": 0,
+    "UF_CRM_1765627743791": data["ym_client_id"],
     #адрес доставки 
     "UF_CRM_1765783423126": f"{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}",
     #тип доставки
