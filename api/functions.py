@@ -190,7 +190,7 @@ def get_deal_fields(data):
     "payment_method": data["payment_method_title"],
     "items": list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"])),
   }
-  print(data["sbjs_current"])
+  #print(data["sbjs_current"])
   #print(unquote(data["sbjs_current"]))
   #items = 
   fields = {
@@ -205,7 +205,7 @@ def get_deal_fields(data):
     "UF_CRM_DLYALUDEIRU57": data["id"],
     "UF_CRM_67978D249E9AE": order_data["payment_method"],
     #ym client id 
-    "UF_CRM_1765627743791": data["ym_client_id"],
+    #"UF_CRM_1765627743791": data["ym_client_id"],
     #адрес доставки 
     "UF_CRM_1765783423126": f"{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}",
     #тип доставки
