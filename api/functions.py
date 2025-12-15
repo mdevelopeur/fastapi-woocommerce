@@ -200,6 +200,11 @@ def get_deal_fields(data):
     #email
     "UF_CRM_1765783595133": data["billing"]["email"],
     #оплачено
-    "UF_CRM_1765783623915": ""
+    "UF_CRM_1765783623915": "",
+    "UTM_SOURCE": "",
+    "UTM_MEDIUM": "",
+    "UTM_CAMPAIGN": "",
+    "UTM_CONTENT": "", 
+    "UTM_TERM": ""
   }
   return fields
