@@ -201,7 +201,7 @@ def get_deal_fields(data):
     "UF_CRM_DLYALUDEIRU57": data["id"],
     #"UF_CRM_67978D249E9AE": order_data["payment_method"],
     #ym client id 
-    "UF_CRM_1765627743791": data["ym_client_id"] if "ym_client_id" in data else ""
+    "UF_CRM_1765627743791": data["ym_client_id"] if "ym_client_id" in data else "",
     #адрес доставки 
     "UF_CRM_1765783423126": f'{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}',
     #тип доставки
