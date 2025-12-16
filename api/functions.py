@@ -185,33 +185,23 @@ async def update_encoding(data):
     await update_deal(client, data)
     
 def get_deal_fields(data):
-  order_data = {
-    "id": data["id"], 
-    "status": data["status"],
-    "total": data["total"],
-    "name": f"{data["shipping"]["first_name"]} {data["shipping"]["last_name"]}",
-    "email": data["billing"]["email"],
-    "phone": data["shipping"]["phone"],
-    "address": f"{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}",
-    "payment_method": data["payment_method_title"],
-    "items": list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"])),
-  }
+  items = list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"]))
   #print(data["sbjs_current"])
   #print(unquote(data["sbjs_current"]))
   #items = 
   fields = {
     "TITLE": f"Заказ #{data["id"]}",
     "CATEGORY_ID": 0,
-    "STAGE_ID": "NEW",
-    "COMMENTS": "\n".join(list(map(lambda item: f"{item["name"]} - {item["quantity"]}: {item["total"]}", order_data["items"]))),
+    "STAGE_ID": "NEW" if data["needs_payment"] else "UC_A3I98V",
+    "COMMENTS": "\n".join(list(map(lambda item: f"{item["name"]} - {item["quantity"]}: {item["total"]}", items))),
     "ORIGIN_ID": data["id"],
     "OPPORTUNITY": data["total"],
     "CONTACT_ID": data["contact_id"],
     "ASSIGNED_BY_ID": 17,
     "UF_CRM_DLYALUDEIRU57": data["id"],
-    "UF_CRM_67978D249E9AE": order_data["payment_method"],
+    #"UF_CRM_67978D249E9AE": order_data["payment_method"],
     #ym client id 
-    #"UF_CRM_1765627743791": data["ym_client_id"],
+    "UF_CRM_1765627743791": data["ym_client_id"] if "ym_client_id" in data else ""
     #адрес доставки 
     "UF_CRM_1765783423126": f"{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}",
     #тип доставки
@@ -221,11 +211,14 @@ def get_deal_fields(data):
     #email
     "UF_CRM_1765783595133": data["billing"]["email"],
     #оплачено
-    "UF_CRM_1765783623915": "",
+    "UF_CRM_1765783623915": "Нет" if data["needs_payment"] else "Да",
+    #способ оплаты
+    "UF_CRM_1765799481323": data["payment_method_title"],
     "UTM_SOURCE": "",
     "UTM_MEDIUM": "",
     "UTM_CAMPAIGN": "",
     "UTM_CONTENT": "", 
     "UTM_TERM": ""
   }
+  
   return fields
