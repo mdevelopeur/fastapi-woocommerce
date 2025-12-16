@@ -203,7 +203,7 @@ def get_deal_fields(data):
     #ym client id 
     "UF_CRM_1765627743791": data["ym_client_id"] if "ym_client_id" in data else ""
     #адрес доставки 
-    "UF_CRM_1765783423126": f"{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}",
+    "UF_CRM_1765783423126": f'{data["shipping"]["city"]}, {data["shipping"]["address_1"]}, {data["shipping"]["postcode"]}',
     #тип доставки
     "UF_CRM_1765783446849": data["shipping_lines"][0]["method_title"],
     #телефон
