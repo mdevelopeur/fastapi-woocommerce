@@ -186,6 +186,8 @@ async def update_encoding(data):
     
 def get_deal_fields(data):
   items = list(map(lambda item: {"name": item["name"], "quantity": item["quantity"], "total": item["total"]}, data["line_items"]))
+  #meta_data 
+  utm_data = {item["key"].replace("_wc_order_attribution_", ""): item["value"] for item in data["meta_data"] if "utm" in item["key"]}
   #print(data["sbjs_current"])
   #print(unquote(data["sbjs_current"]))
   #items = 
@@ -214,11 +216,11 @@ def get_deal_fields(data):
     "UF_CRM_1765783623915": "Нет" if data["needs_payment"] else "Да",
     #способ оплаты
     "UF_CRM_1765799481323": data["payment_method_title"],
-    "UTM_SOURCE": "",
-    "UTM_MEDIUM": "",
-    "UTM_CAMPAIGN": "",
-    "UTM_CONTENT": "", 
-    "UTM_TERM": ""
+    "UTM_SOURCE": utm_data["utm_source"] if "utm_source" in utm_data else "",
+    "UTM_MEDIUM": utm_data["utm_medium"] if "utm_medium" in utm_data else "",
+    "UTM_CAMPAIGN": utm_data["utm_campaign"] if "utm_source" in utm_data else "",
+    "UTM_CONTENT": utm_data["utm_content"] if "utm_content" in utm_data else "", 
+    "UTM_TERM": utm_data["utm_term"] if "utm_term" in utm_data else ""
   }
   
   return fields
